@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <title>Gestione Approvazioni - Bookclub</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+    }
+    h1 {
+      color: #333;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+    table th, table td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: left;
+    }
+    table th {
+      background-color: #f4f4f4;
+    }
+    .button {
+      padding: 5px 10px;
+      margin: 2px;
+      border: none;
+      color: #fff;
+      cursor: pointer;
+      border-radius: 3px;
+    }
+    .approve {
+      background-color: #4CAF50;
+    }
+    .reject {
+      background-color: #f44336;
+    }
+  </style>
+</head>
+<body id="corpo">
+  <div id="blackLayer"></div>
+
+<div id="sideBar" class="sideBar">
+<header class="sideBarHeader">BookClub
+
+</header>
+<hr class="line">
+<div id="SideBarContent" class="contenutoSideBar">
+    
+</div>
+
+</div>
+
+<div id="LoginScreen" class="Login">
+<h1 id="logintitle"> Ti diamo il benvenuto </h1>
+<form id="dataForm">
+    <fieldset class="loginfield">
+    <legend>Username</legend>
+    <input type="text" id="username" class="search-input" placeholder="Nome">
+    </fieldset>
+
+    <fieldset class="loginfield">
+    <legend>Password</legend>
+    <input type="password" class="search-input" id="password" placeholder="Password">
+    </fieldset>
+
+    <button id="submit" class="buttonStyle">Continua</button>
+</form>
+<p id="register">Non hai un account?<a id="asumbit">Registrati</a></p>
+<p id="response" style="opacity:0; transition: opacity 0.5s;"></p>
+</div>
+
+<div id="registerScreen" class="Registrazione">
+    <h1 id="registertitle"> Ti diamo il benvenuto </h1>
+    <form id="registerForm">
+        <fieldset class="loginfield">
+            <legend>Username</legend>
+            <input type="text" id="registerusername" class="search-input" placeholder="Nome" required>
+        </fieldset>
+
+        <fieldset class="loginfield">
+            <legend>Email</legend>
+            <input type="email" class="search-input" id="registeremail" placeholder="Email" required>
+        </fieldset>
+    
+        <fieldset class="loginfield">
+            <legend>Password</legend>
+            <input type="password" class="search-input" id="registerpassword" placeholder="Password" required>
+        </fieldset>
+    
+        <button id="registerSubmit" class="buttonStyle">Continua</button>
+    </form>
+    <p id="response"></p>
+    </div>
+
+<header>
+<div id="menuBar">
+    <div>
+    <button id="sideBarExit" class="material-icons" style="background: transparent; border: none; cursor: pointer;" onclick="openNav()" >menu</button>
+    <button class="material-icons" style="background: transparent; border: none; cursor: pointer;" onclick="goHome()" >home</button>
+    </div>
+    <div class="searching">
+            <div class="search">
+            <img class="magnifyglass" src="assets/magnifyglass.png" alt="Image #6">
+            <input type="search" id ="searchINput" class="search-input" placeholder="Search">
+            </div>
+
+    </div>
+<div id="loggedTool" style="display: none;">
+    <div class="dropdown">
+        <button id="buttonoLogin" class="buttonloginLogged"></button>
+        <div class="content">
+            <div id="AccountPreference" class="tastoAccount">Preferenze Account</div>
+            <div id="MyBook" class="tastoAccount">I miei libri</div>
+            <div id="MyComment" class="tastoAccount">I miei commenti</div>
+            <div id="addBook" class="tastoAccount">Aggiungi Libri</div>
+            <div style = "display:none;" id="manageRequest" class="tastoAccount">Approvazione libri</div>
+            <div id="exitButton" class="tastoAccount">Logout</div>
+        </div>
+    </div>
+</div>
+<button id="buttonLogin" class="material-icons" style="background: transparent; border: none; cursor: pointer;">login</button>
+   
+</div>
+</header>
+<div style="padding-left: 50px; padding-right: 50px;">
+  <h1>Gestione Approvazioni</h1>
+
+  <section id="books">
+    <h2>Libri in attesa di approvazione</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Nome Utente</th>
+          <th>Email Utente</th>  
+          <th>Titolo</th>
+          <th>Autore</th>
+          <th>Descrizione</th>
+          <th>Azione</th>
+        </tr>
+      </thead>
+      <tbody id="adminPage">
+     
+      </tbody>
+    </table>
+  </section>
+
+  
+</div>
+</body>
+</html>
