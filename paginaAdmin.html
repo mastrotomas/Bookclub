@@ -1,15 +1,50 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <title>Gestione Approvazioni - Bookclub</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+    }
+    h1 {
+      color: #333;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+    table th, table td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: left;
+    }
+    table th {
+      background-color: #f4f4f4;
+    }
+    .button {
+      padding: 5px 10px;
+      margin: 2px;
+      border: none;
+      color: #fff;
+      cursor: pointer;
+      border-radius: 3px;
+    }
+    .approve {
+      background-color: #4CAF50;
+    }
+    .reject {
+      background-color: #f44336;
+    }
+  </style>
 </head>
 <body id="corpo">
-
-<div id="blackLayer"></div>
+  <div id="blackLayer"></div>
 
 <div id="sideBar" class="sideBar">
 <header class="sideBarHeader">BookClub
@@ -19,6 +54,7 @@
 <div id="SideBarContent" class="contenutoSideBar">
     
 </div>
+
 </div>
 
 <div id="LoginScreen" class="Login">
@@ -93,56 +129,29 @@
    
 </div>
 </header>
+<div style="padding-left: 50px; padding-right: 50px;">
+  <h1>Gestione Approvazioni</h1>
 
-<main>
+  <section id="books">
+    <h2>Libri in attesa di approvazione</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Nome Utente</th>
+          <th>Email Utente</th>  
+          <th>Titolo</th>
+          <th>Autore</th>
+          <th>Descrizione</th>
+          <th>Azione</th>
+        </tr>
+      </thead>
+      <tbody id="adminPage">
+     
+      </tbody>
+    </table>
+  </section>
 
-<div class="slider">
-<div class="slides">
-<img class="slide" src="assets/Banner/banner1.png" alt="Image #1">
-<img class="slide" src="assets/Banner/banner2.png" alt="Image #2">
-<img class="slide" src="assets/Banner/banner3.png" alt="Image #3">
+  
 </div>
-
-<button class="previous" onclick="prevSlide()"> &#10094 </button>
-<button class="next" onclick="nextSlide()"> &#10095 </button>
-</div>
-<div id="NovitaeConsigliati" class="midSection">
-
-<fieldset id="fieldsetConsigliati" style="display: none;"class="field">
-<legend>Consigliati per te</legend>
-<div id="scrollDivConsigliati"class="scroll">
-
-</div>
-</fieldset>
-
-<fieldset id="fieldsetNovita" class="field">
-<legend>Novità</legend>
-<div id="scrollDivNovita"class="scroll">
-
-</div>
-</fieldset>
-</div>
-
-<div class="lowerSection">
-
-<fieldset class="field">
-
-<legend>Migliori di sempre</legend>
-<div id="scrollDivWeek" class="scroll">
-
-</div>
-
-
-
-</fieldset>
-</div>
-</main>
-
-<footer>
-    <div style="height: 100%; display: flex; align-items: center; padding-left:20px;">
-    Copyright © 2025 RaffNicoTomm Tutti i diritti riservati.
-    </div>
-</footer>
-<script src="index.js"></script>
 </body>
 </html>
