@@ -1,0 +1,888 @@
+body {
+    margin: 0px;
+}
+
+body legend{
+    font-size: 25px;
+    font-weight: bold;
+}
+.scrollBlock {
+    margin: 0;
+    height: 100%;
+    overflow: hidden;
+}
+
+/*SearchBar*/
+.magnifyglass {
+    width: 20px;
+    height: 20px;
+}
+
+.search {
+    --padding: 5px;
+
+    width: max-content;
+    display: flex;
+    align-items: center;
+    padding: var(--padding);
+    border-radius: 28px;
+    background: white;
+    box-shadow: 0px 0px 10px gray;
+
+}
+
+.search-input {
+    font-size: 16px;
+    color: gray;
+    margin-left: var(--padding);
+    outline: none;
+    border: none;
+    background: transparent;
+    width: 100%;
+}
+
+.hiddenbutton {
+    display: none;
+}
+
+#menuBar {
+    display: flex;
+    justify-content: space-between;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.buttonStyleNew{
+    width: 70%;
+    color: white;
+    left: 11%;
+    right: 10%;
+    background-color: lightgreen;
+    height: 50px;
+    position: relative;
+    font-size: 16px;
+    margin-left: var(--padding);
+    outline: none;
+    border: none;
+    border-radius: 28px;
+    box-shadow: 0px 0px 10px gray;
+    margin: 20px;
+    margin-bottom: 2px;
+    transition: 0.5s;
+    z-index: 0;
+}
+.buttonStyleNew:hover {
+    background: green;
+    cursor: pointer
+}
+/*Stile Bottoni Sito*/
+.buttonStyle {
+    position: flex;
+    font-size: 16px;
+    color: gray;
+    margin-left: var(--padding);
+    outline: none;
+    border: none;
+    background: white;
+    border-radius: 28px;
+    box-shadow: 0px 0px 10px gray;
+    margin: 3px;
+    transition: 0.5s;
+    z-index: 0;
+}
+
+.buttonloginLogged {
+    position: flex;
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
+    color: gray;
+    margin-left: var(--padding);
+    outline: none;
+    border: none;
+    background: white;
+    border-radius: 28px;
+    box-shadow: 0px 0px 10px gray;
+    margin: 3px;
+    transition: 0.5s;
+    z-index: 0;
+}
+
+.buttonloginLogged:hover {
+    background: lightGray;
+    cursor: pointer;
+    z-index: 1;
+
+}
+
+.buttonStyle:hover {
+    background: lightGray;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.dropdown {
+    display: inline-block;
+    z-index: 1;
+}
+
+.dropdown button {
+    background-color: white;
+    color: gray;
+    border: none;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.dropdown .tastoAccount {
+    display: block;
+    color: black;
+    text-decoration: none;
+    padding: 10px 15px;
+    z-index: 1;
+}
+.dropdown .tastoAccount:hover {
+    background-color: LightGray;
+    cursor: pointer;
+    z-index: 1;
+}
+.dropdown .content {
+    display: none;
+    position: absolute;
+    background-color: white;
+    min-width: 100px;
+    box-shadow: 2px 2px 5px black;
+    z-index: 1;
+    right: 1%;
+
+}
+
+.dropdown:hover .content {
+    display: block;
+    z-index: 1;
+}
+
+.dropdown:hover button {
+    background-color: LightGray;
+    z-index: 1;
+}
+
+/*Barra Alta con SearchBar e Bottoni*/
+#menuBar {
+    display: flex;
+    justify-content: space-between;
+    margin-left: 10px;
+    margin-right: 10px;
+    align-items: center;
+}
+
+header {
+    background-color: LightBlue;
+    height: 62px;
+    align-content: center;
+}
+
+footer {
+    height: 62px;
+    margin-top: 10px;
+    background-color: #333;
+    z-index: 2;
+    color: lightgray;
+}
+
+/*Slider Immagini*/
+.slider {
+    position: relative;
+    width: 100%;
+    margin: auto;
+    overflow: hidden;
+
+}
+
+.slider img {
+    width: 100%;
+    display: none;
+}
+
+img.displaySlide {
+    display: block;
+    animation-name: fade;
+    animation-duration: 1.5s;
+}
+
+.slider button {
+    position: absolute;
+    width: 3vw;
+    height: 3vw;
+    min-width: 20px;
+    max-width: 50px;
+    min-height: 20px;
+    max-height: 50px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 12px;
+    background-color: white;
+    border-radius: 50%;
+    color: black;
+    border: 1.5px solid black;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.previous {
+    left: 10%;
+}
+
+.next {
+    right: 10%;
+}
+
+@keyframes fade {
+    from {
+        opacity: .5
+    }
+
+    to {
+        opacity: 1
+    }
+}
+
+/*Sezione con Consigliate ed Offerte*/
+
+
+.midSection .field {
+    height: 350px;
+    display: flex;
+    overflow: hidden;
+    border: 1px solid black;
+    min-width: inherit;
+    margin: 10px;
+    background-color: rgb(242, 242, 247);
+    box-shadow: 0px 0px 15px gray;
+}
+
+
+/*Stile della Top Settimanale*/
+.lowerSection .field {
+    max-width: 100%;
+    height: 350px;
+    display: flex;
+    overflow: hidden;
+    border: 1px solid black;
+    min-width: inherit;
+    margin: 10px;
+    background-color: rgb(242, 242, 247);
+    box-shadow: 0px 0px 15px gray;
+
+}
+
+/*Scroll dei 3 frame*/
+.scroll {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: flex-start;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+.lowerSection .scroll {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: flex-start;
+    overflow-x: auto;
+    overflow-y: hidden;
+    margin-left: 19px;
+    margin-right: 19px;
+
+}
+
+/*Stile dei Libri Copertina e Nome*/
+.book img {
+    width: auto;
+    max-height: 80%;
+    object-fit: contain;
+}
+
+.book {
+    display:flex;
+    justify-content: center;
+    flex-direction: column;
+    margin: 10px;
+    max-width: 300px;
+    height: 85%;
+}
+
+.bookName{
+    text-align: center;
+    font-size : 12px;
+    width: 150px;
+}
+
+/*Barra Navigazione Sottocategorie Top Settimanale*/
+.navigation {
+    display: flex;
+    justify-content: center;
+}
+
+.navbar {
+    position: absolute;
+    background: lightGray;
+    box-shadow: 0px 0px 15px gray;
+}
+
+.navbar a {
+    position: relative;
+    color: white;
+    text-decoration: none;
+    padding: 15px;
+    text-align: center;
+}
+
+.navbar a::before {
+    content: '';
+    position: absolute;
+    top: 65%;
+    left: 0;
+    width: 0%;
+    height: 2px;
+    ;
+    background: white;
+    transition: .3s;
+}
+
+.navbar a:hover::before {
+    width: 100%;
+}
+
+/*sideBar*/
+.sideBar {
+    position: absolute;
+    width: 250px;
+    height: 100%;
+    background-color: rgb(242, 242, 247);
+    z-index: 1;
+    transition: 0.3s;
+    left: -30%;
+}
+
+.sideBar a {
+    position: absolute;
+    color: black;
+    text-decoration: none;
+    padding: 15px;
+    text-align: center;
+}
+
+.line {
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 0;
+    margin-bottom: 0;
+    color: lightGray;
+}
+
+.sideBarHeader {
+    display: flex;
+    font-size : 30px;
+    font-weight: bold;
+    justify-content: center;
+    margin-right : 20px;
+    align-items: center;
+    padding-left: 15px;
+    background-color: rgb(242, 242, 247);
+}
+.contenutoSideBar{
+    position: absolute;
+    min-width: 100%;
+}
+.elementoSideBar{
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 100%;
+}
+.contenutoSideBar div:hover{
+    height: 40px;
+    font-size: 23px;
+    background-color: lightGray;
+    cursor: pointer;
+}
+.SideMenuEnabled {
+    position: fixed;
+    width: 250px;
+    height: 100%;
+    z-index: 3;
+    transition: 0.3s;
+    left: 0%;
+
+}
+
+/*SideBar header*/
+#siderBarExit {
+    position: absolute;
+    top: 1.4%;
+    right: -28%;
+
+}
+
+.blackLayerEnabled {
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    opacity: 0.5;
+    z-index: 2;
+    position: fixed;
+}
+
+.forma {
+    display: flex;
+    align-items: center;
+    height: 750px;
+    width: 200px;
+}
+
+.forma2 {
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+}
+
+.forma2 h3 {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+
+}
+
+.forma2 .checkboxing {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    width: 100%;
+
+}
+
+.forma3 {
+    width: 80%;
+}
+
+.forma3 h3 {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+
+}
+
+.forma3 .checkboxing {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    width: 100%;
+
+}
+.forma h3 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.forma .checkboxing {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.results {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-top: 30px;
+}
+
+.searchIndex {
+    display: flex;
+
+}
+
+
+.box {
+    height: 200px;
+    width: 100%;
+    border: 1px solid black;
+    box-shadow: 0px 0px 15px gray;
+    margin: 10px 0;
+}
+
+.insidebox {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    justify-content: flex-end;
+}
+
+.descrizione {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.NomeLibro {
+    height: 30%;
+    width: 500px;
+    overflow: hidden;
+}
+
+.commentolibro {
+    height: 45%;
+    width: 90%;
+    word-wrap: break-word;
+    overflow-y: hidden;
+}
+
+.insidebox img {
+    margin: 10px 0;
+    padding: 10px;
+    width: auto;
+    height: 80%;
+    object-fit: cover;
+}
+
+/* Contenitore per la paginazione */
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 0px;
+}
+
+/* Stile dei pulsanti di navigazione */
+.pagination button {
+    display: fixed;
+    margin: 0 5px;
+    padding: 10px;
+    border: none;
+    background-color: #f0f0f0;
+    cursor: pointer;
+}
+
+.pagination button.active {
+    background-color: #007bff;
+    color: white;
+}
+
+.ContenitoreRisultati {
+    width: 85%;
+    height: 1000px;
+}
+
+.Registrazione {
+    padding: 20px;
+    position: absolute;
+    width: 0px;
+    height: 0px;
+    background: white;
+    border-radius: 28px;
+    z-index: 1;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: 0.3s;
+}
+
+.RegistrazioneAppear {
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    transition: 0.3s;
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    background: white;
+    border-radius: 28px;
+    z-index: 3;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 1;
+    box-shadow: 0px 0px 15px gray inset;
+}
+
+.RegistrazioneAppear .loginfield {
+    margin: 10px;
+    border-radius: 10px;
+}
+
+.RegistrazioneAppear button {
+    width: 70%;
+    color: white;
+    left: 11%;
+    right: 10%;
+    background-color: lightgreen;
+    height: 50px;
+    position: relative;
+    font-size: 16px;
+    margin-left: var(--padding);
+    outline: none;
+    border: none;
+    border-radius: 28px;
+    box-shadow: 0px 0px 10px gray;
+    margin: 20px;
+    margin-bottom: 2px;
+    transition: 0.5s;
+    z-index: 0;
+}
+
+.RegistrazioneAppear button:hover {
+    background: green;
+    cursor: pointer
+}
+
+.RegistrazioneAppear h1 {
+    display: flex;
+    justify-content: center;
+}
+
+.Login {
+    padding: 20px;
+    position: absolute;
+    width: 0px;
+    height: 0px;
+    background: white;
+    border-radius: 28px;
+    z-index: 1;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: 0.3s;
+}
+
+.LoginAppear {
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    transition: 0.3s;
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    background: white;
+    border-radius: 28px;
+    z-index: 3;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 1;
+    box-shadow: 0px 0px 15px gray inset;
+}
+
+.LoginAppear .loginfield {
+    margin: 10px;
+    border-radius: 10px;
+}
+
+.LoginAppear button {
+    width: 70%;
+    color: white;
+    left: 11%;
+    right: 10%;
+    background-color: lightgreen;
+    height: 50px;
+    position: relative;
+    font-size: 16px;
+    margin-left: var(--padding);
+    outline: none;
+    border: none;
+    border-radius: 28px;
+    box-shadow: 0px 0px 10px gray;
+    margin: 20px;
+    margin-bottom: 2px;
+    transition: 0.5s;
+    z-index: 0;
+}
+
+.LoginAppear button:hover {
+    background: green;
+    cursor: pointer
+}
+
+.LoginAppear #register {
+    display: flex;
+    justify-content: center;
+}
+
+.LoginAppear h1 {
+    display: flex;
+    justify-content: center;
+}
+
+.LoginAppear a {
+    color: lightgreen;
+    text-decoration: none;
+}
+
+#asumbit {
+    padding-left: 8px;
+}
+
+.massimoContenitore {
+    width: 100%;
+    height: 500px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+
+
+.contenitoreDescrizione {
+    width: 50%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding-left: 10px;
+}
+
+.ContenitoreCommenti {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.BottoniLink {
+    width: 50%;
+    display: flex;
+    justify-content: space-around;
+    padding-bottom: 30px;
+}
+
+.contenitoreDescrizione .commentolibro {
+    width: 100%;
+    word-wrap: break-word;
+    overflow-y: scroll;
+}
+
+
+.Comment {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    /* Bordo arrotondato */
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(242, 242, 247);
+    width: 98%;
+    height: auto;
+    margin: 10px auto;
+    padding: 15px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.Comment .Account {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.fototizio {
+    background-color: gray;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.NomeTizio {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    padding: 5px 10px;
+}
+
+.Comment .Boxing {
+    border: 1px solid #ddd;
+    background-color: white;
+    width: 98.5%;
+    height: auto;
+    word-wrap: break-word;
+    padding: 10px;
+    font-size: 14px;
+    line-height: 1.5;
+    border-radius: 5px;
+    box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+#response {
+    display: flex;
+    justify-content: center;
+}
+
+.linkOpened{
+    padding: 5px;
+    margin-top: 5px;
+    margin-left: 20px;
+    width: 100%;
+}
+
+
+.linkHidded{
+    display:none;
+}
+
+.contenitoreFoto2{
+    border: 1px solid black;
+    border-radius: 10px;
+    transition: 0.5s;
+    height: 100%;
+    width: 65%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.contenitoreFoto2:hover{
+    background: lightGray;
+    cursor: pointer;
+    z-index: 1;
+    transition: 0.5s
+}
+
+.editable-field {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.edit-button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.search-inputa {
+    width: 80%;
+    padding: 8px;
+    margin: 5px 0;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.deleteButton{
+    position: absolute;
+    height: 50px;
+    width: 50px;
+    background-color: red;
+}
