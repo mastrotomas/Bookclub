@@ -1,5 +1,5 @@
 import  mysql.connector
-
+import re
 
 def getConnection():
     return mysql.connector.connect(
@@ -58,4 +58,50 @@ def addNewUser(username,email,password):
         cursor.close()
         conn.close()
         return 1
-  
+    
+
+def searchBooks(titoloLibro):
+    conn = getConnection()
+    cursor = conn.cursor()
+    query = "SELECT * FROM books WHERE titolo LIKE %s AND isApproved = 1;"
+    cursor.execute(query, (f"%{titoloLibro}%",))
+    rows = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return rows
+
+def categoryBooks(titoloLibro):
+    conn = getConnection()
+    cursor = conn.cursor()
+    query = "SELECT * FROM books a JOIN book_genres b ON a.id = b.book_id JOIN genres c ON b.genre_id = c.genre_id WHERE isApproved = 1 AND c.name = %s;"
+    cursor.execute(query, (titoloLibro,))
+    rows = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return rows
+
+def ricercapergenere(titoloLibro,type):
+    res_list = []
+    res_list = re.findall('[A-Z][^A-Z]*', type)
+    stringa = ""
+    
+    for i in range(len(res_list)):
+        if(stringa == ""):
+            stringa = '%s'
+        else:
+            stringa = stringa + ',' + '%s'
+    
+    conn = getConnection()
+    cursor = conn.cursor()
+
+    if(len(res_list) == 1):
+        query = f"SELECT DISTINCT id,titolo,descrizione,imagePath FROM books a JOIN book_genres b ON a.id = b.book_id JOIN genres c ON b.genre_id = c.genre_id WHERE titolo LIKE %s AND isApproved = 1 AND c.name = {stringa}"
+    else:
+        query = f"SELECT DISTINCT id,titolo,descrizione,imagePath  FROM books a JOIN book_genres b ON a.id = b.book_id JOIN genres c ON b.genre_id = c.genre_id WHERE titolo LIKE %s AND isApproved = 1 AND c.name IN ({stringa})"
+    parametri = (f"%{titoloLibro}%",) + tuple(res_list)
+    cursor.execute(query, parametri)
+    rows = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return rows
+

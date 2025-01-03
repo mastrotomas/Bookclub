@@ -1,7 +1,12 @@
 const slides = document.querySelectorAll(".slides img");
 const form = document.getElementById('dataForm');
 const registerform = document.getElementById('registerForm');
-
+window.GeneridiLibro = ["Racconto","Letteratura","Romanzo","Fantasy",
+    "Romanzo di Formazione","Fantastico","Giallo","Thriller",
+    "Drammatico","Sentimentale","Storico","Gotico","Filosofico",
+    "Horror","Fantascienza","Politica","Economia","Diritto",
+    "Biografia","Casa","Arte","Poetico","Educazione","Viaggi",
+    "Psicologia","Religione","Salute e Benessere","Scienza","Sport"];
 let slideIndex = 0;
 let intervalId = null;
 
@@ -18,7 +23,6 @@ const responseLogin = document.getElementById("response");
 const ToolLogin = document.getElementById("loggedTool");
 const buttonExit = document.getElementById("exitButton");
 const searchInput = document.getElementById("searchINput");
-
 
 function initializeSlider() {
     if (slides.length > 0) {
@@ -107,6 +111,354 @@ blacklayer.addEventListener("click", () => {
 })
 
 
+function passaggioCategoria(text){
+    window.location.href = `searchIndex.html?category=${text}`;
+}
+
+
+searchInput.addEventListener("keydown", async function (event) {
+    if (event.key === "Enter") {
+        event.preventDefault(); //inmpedisce che search funzioni come form e invii dati ricaricando la pagina. senno le funzioni sotto non vanno.
+        const searchTerm = searchInput.value;
+        if (searchTerm) {
+            // Reindirizza alla nuova pagina con il termine di ricerca nell'URL
+            window.location.href = `searchIndex.html?query=${encodeURIComponent(searchTerm)}`;
+        }
+    }
+})
+
+
+
+document.addEventListener("DOMContentLoaded", async function () {
+    // Funzione per ottenere i parametri della query string
+    function getQueryParameter(param) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(param);
+    }
+
+    const searchTerm = getQueryParameter("query"); // Ottieni il termine di ricerca
+    const searchtype = getQueryParameter("type");
+    const category = getQueryParameter("category");
+
+    if (searchtype) {
+        const registerData = {
+            valorecercato: searchTerm,
+            generevalore: searchtype,
+        };
+
+        try {
+            const response = await fetch('http://127.0.0.1:5000/bookspergenere', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(registerData)
+            });
+
+            const results = await response.json(); // Supponiamo che il backend restituisca un array di libri
+            const resultsContainer = document.getElementById("resultssearching");
+            const paginationContainer = document.querySelector(".pagination");
+            const itemsPerPage = 4; // Numero di elementi per pagina
+            let currentPage = 1;
+
+            // Funzione per creare un blocco dinamico
+            function createBlock(book) {
+                const box = document.createElement("div");
+                const insidebox = document.createElement("div");
+                const image = document.createElement("img");
+                const desc = document.createElement("div");
+                const bookname = document.createElement("div");
+                const commentoLibro = document.createElement("div");
+
+                // Assegna classi e ID
+                box.className = "box";
+                insidebox.className = "insidebox";
+
+                image.className = "pop";
+                image.src = book.imagePath;
+                image.alt = "Book Image"; // Alt per accessibilità
+
+                desc.className = "descrizione";
+
+                bookname.className = "NomeLibro";
+                bookname.innerHTML = `<h1>${book.bookname}</h1>`; // Contenuto dinamico
+
+                commentoLibro.className = "commentolibro";
+                commentoLibro.innerHTML = `<p>${book.bookdesc}</p>`; // Contenuto dinamico
+
+                // Costruzione della gerarchia
+                desc.appendChild(bookname);
+                desc.appendChild(commentoLibro);
+
+                insidebox.appendChild(image);
+                insidebox.appendChild(desc);
+
+                box.appendChild(insidebox);
+
+                // Aggiungi un listener per il click sul blocco
+                box.addEventListener("click", () => {
+                    window.location.href = `bookpage.html?id=${book.bookId}`;
+                });
+
+                return box;
+            }
+
+            // Funzione per mostrare i blocchi della pagina corrente
+            function showPage(page) {
+                const start = (page - 1) * itemsPerPage;
+                const end = start + itemsPerPage;
+
+                // Pulisce il contenitore
+                resultsContainer.innerHTML = "";
+
+                // Mostra i blocchi della pagina corrente
+                results.slice(start, end).forEach((book) => {
+                    const block = createBlock(book);
+                    resultsContainer.appendChild(block);
+                });
+
+                // Aggiorna i pulsanti di navigazione
+                document.querySelectorAll(".pagination button").forEach((button, index) => {
+                    button.classList.toggle("active", index + 1 === page);
+                });
+            }
+
+            // Funzione per creare i pulsanti di navigazione
+            function createPagination() {
+                const totalPages = Math.ceil(results.length / itemsPerPage);
+                paginationContainer.innerHTML = ""; // Pulisce i pulsanti esistenti
+                for (let i = 1; i <= totalPages; i++) {
+                    const button = document.createElement("button");
+                    button.textContent = i;
+                    if (i === currentPage) button.classList.add("active");
+                    button.addEventListener("click", () => {
+                        currentPage = i;
+                        showPage(currentPage);
+                    });
+                    paginationContainer.appendChild(button);
+                }
+            }
+
+            // Inizializza la paginazione
+            createPagination();
+            showPage(currentPage);
+        } catch (error) {
+            console.error("Errore durante l'invio dei dati:", error);
+        }
+    }else if(searchTerm){
+        const registerData = {
+            valorecercato: searchTerm,
+        };
+
+        try {
+            const response = await fetch('http://127.0.0.1:5000/books', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(registerData)
+            });
+
+            const results = await response.json(); // Supponiamo che il backend restituisca un array di libri
+            const resultsContainer = document.getElementById("resultssearching");
+            const paginationContainer = document.querySelector(".pagination");
+            const itemsPerPage = 4; // Numero di elementi per pagina
+            let currentPage = 1;
+
+            // Funzione per creare un blocco dinamico
+            function createBlock(book) {
+                const box = document.createElement("div");
+                const insidebox = document.createElement("div");
+                const image = document.createElement("img");
+                const desc = document.createElement("div");
+                const bookname = document.createElement("div");
+                const commentoLibro = document.createElement("div");
+
+                // Assegna classi e ID
+                box.className = "box";
+                insidebox.className = "insidebox";
+
+                image.className = "pop";
+                image.src = book.imagePath;
+                image.alt = "Book Image"; // Alt per accessibilità
+
+                desc.className = "descrizione";
+
+                bookname.className = "NomeLibro";
+                bookname.innerHTML = `<h1>${book.bookname}</h1>`; // Contenuto dinamico
+
+                commentoLibro.className = "commentolibro";
+                commentoLibro.innerHTML = `<p>${book.bookdesc}</p>`; // Contenuto dinamico
+
+                // Costruzione della gerarchia
+                desc.appendChild(bookname);
+                desc.appendChild(commentoLibro);
+
+                insidebox.appendChild(image);
+                insidebox.appendChild(desc);
+
+                box.appendChild(insidebox);
+
+                // Aggiungi un listener per il click sul blocco
+                box.addEventListener("click", () => {
+                    window.location.href = `bookpage.html?id=${book.bookId}`;
+                });
+
+                return box;
+            }
+
+            // Funzione per mostrare i blocchi della pagina corrente
+            function showPage(page) {
+                const start = (page - 1) * itemsPerPage;
+                const end = start + itemsPerPage;
+
+                // Pulisce il contenitore
+                resultsContainer.innerHTML = "";
+
+                // Mostra i blocchi della pagina corrente
+                results.slice(start, end).forEach((book) => {
+                    const block = createBlock(book);
+                    resultsContainer.appendChild(block);
+                });
+
+                // Aggiorna i pulsanti di navigazione
+                document.querySelectorAll(".pagination button").forEach((button, index) => {
+                    button.classList.toggle("active", index + 1 === page);
+                });
+            }
+
+            // Funzione per creare i pulsanti di navigazione
+            function createPagination() {
+                const totalPages = Math.ceil(results.length / itemsPerPage);
+                paginationContainer.innerHTML = ""; // Pulisce i pulsanti esistenti
+                for (let i = 1; i <= totalPages; i++) {
+                    const button = document.createElement("button");
+                    button.textContent = i;
+                    if (i === currentPage) button.classList.add("active");
+                    button.addEventListener("click", () => {
+                        currentPage = i;
+                        showPage(currentPage);
+                    });
+                    paginationContainer.appendChild(button);
+                }
+            }
+
+            // Inizializza la paginazione
+            createPagination();
+            showPage(currentPage);
+        } catch (error) {
+            console.error("Errore durante l'invio dei dati:", error);
+        }
+    }else if(category){
+        const registerData = {
+            valorecercato: category,
+        };
+
+        try {
+            const response = await fetch('http://127.0.0.1:5000/categoriadeilibri', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(registerData)
+            });
+
+            const results = await response.json(); // Supponiamo che il backend restituisca un array di libri
+            document.getElementById("checkboxCategory").style.display ="none";
+            document.getElementById("containerSearchingBox").style.justifyContent = "center";
+            const resultsContainer = document.getElementById("resultssearching");
+            const paginationContainer = document.querySelector(".pagination");
+            const itemsPerPage = 4; // Numero di elementi per pagina
+            let currentPage = 1;
+
+            // Funzione per creare un blocco dinamico
+            function createBlock(book) {
+                const box = document.createElement("div");
+                const insidebox = document.createElement("div");
+                const image = document.createElement("img");
+                const desc = document.createElement("div");
+                const bookname = document.createElement("div");
+                const commentoLibro = document.createElement("div");
+
+                // Assegna classi e ID
+                box.className = "box";
+                insidebox.className = "insidebox";
+
+                image.className = "pop";
+                image.src = book.imagePath;
+                image.alt = "Book Image"; // Alt per accessibilità
+
+                desc.className = "descrizione";
+
+                bookname.className = "NomeLibro";
+                bookname.innerHTML = `<h1>${book.bookname}</h1>`; // Contenuto dinamico
+
+                commentoLibro.className = "commentolibro";
+                commentoLibro.innerHTML = `<p>${book.bookdesc}</p>`; // Contenuto dinamico
+
+                // Costruzione della gerarchia
+                desc.appendChild(bookname);
+                desc.appendChild(commentoLibro);
+
+                insidebox.appendChild(image);
+                insidebox.appendChild(desc);
+
+                box.appendChild(insidebox);
+
+                // Aggiungi un listener per il click sul blocco
+                box.addEventListener("click", () => {
+                    window.location.href = `bookpage.html?id=${book.bookId}`;
+                });
+
+                return box;
+            }
+
+            // Funzione per mostrare i blocchi della pagina corrente
+            function showPage(page) {
+                const start = (page - 1) * itemsPerPage;
+                const end = start + itemsPerPage;
+
+                // Pulisce il contenitore
+                resultsContainer.innerHTML = "";
+
+                // Mostra i blocchi della pagina corrente
+                results.slice(start, end).forEach((book) => {
+                    const block = createBlock(book);
+                    resultsContainer.appendChild(block);
+                });
+
+                // Aggiorna i pulsanti di navigazione
+                document.querySelectorAll(".pagination button").forEach((button, index) => {
+                    button.classList.toggle("active", index + 1 === page);
+                });
+            }
+
+            // Funzione per creare i pulsanti di navigazione
+            function createPagination() {
+                const totalPages = Math.ceil(results.length / itemsPerPage);
+                paginationContainer.innerHTML = ""; // Pulisce i pulsanti esistenti
+                for (let i = 1; i <= totalPages; i++) {
+                    const button = document.createElement("button");
+                    button.textContent = i;
+                    if (i === currentPage) button.classList.add("active");
+                    button.addEventListener("click", () => {
+                        currentPage = i;
+                        showPage(currentPage);
+                    });
+                    paginationContainer.appendChild(button);
+                }
+            }
+
+            // Inizializza la paginazione
+            createPagination();
+            showPage(currentPage);
+        } catch (error) {
+            console.error("Errore durante l'invio dei dati:", error);
+        }
+    }
+});
+
+
 function openNav() {
     sideBar.classList.toggle("SideMenuEnabled");
     blacklayer.classList.toggle("blackLayerEnabled");
@@ -178,9 +530,142 @@ window.addEventListener('DOMContentLoaded', () => {
         document.getElementById("loggedTool").style.display = "block";
         document.getElementById('buttonoLogin').textContent = localStorage.getItem("initialnameletter");
     }
+    const contenitore = document.getElementById("SideBarContent");
+    GeneridiLibro.forEach(categoria =>{
+        const tasto = document.createElement("div");
+        tasto.classList.add("elementoSideBar");
+        tasto.textContent = categoria;
+        tasto.addEventListener("click", () =>{
+            window.location.href = `searchIndex.html?category=${categoria}`;
+        })
+        contenitore.appendChild(tasto);
+    })
+    const CategoryCheckBox = document.getElementById("ContainerCheckBoxCategory");
+    const searchTerm = getQueryParameter("query");
+    const catTerm = getQueryParameter("type");
+    if(searchTerm || catTerm){
+
+        GeneridiLibro.forEach(categoria =>{
+            const label = document.createElement("label");
+            label.textContent = categoria;
+            const checkbox = document.createElement("input");
+            checkbox.type = "checkbox";
+            checkbox.id = categoria;
+            checkbox.value = categoria;
+            checkbox.name = categoria;
+
+            if(isIn(checkbox.id)){
+                checkbox.checked = true;
+            }
+
+            label.appendChild(checkbox);
+            CategoryCheckBox.appendChild(label);
+        })
+        localStorage.removeItem("Checked");
+    }
 })
 
+function isIn(test){
+    const savedData = localStorage.getItem("Checked");
+    let count;
+    if(savedData){
+        const myArray = JSON.parse(savedData);
+        myArray.forEach(chec =>{
+            if(test == chec){
+                count = true;
+            }
+        })
+    }
+    return count;
+}
 
+document.addEventListener("DOMContentLoaded", function () {
+    const boxes = document.querySelectorAll(".results .box");
+    const itemsPerPage = 4;
+    const paginationContainer = document.querySelector(".pagination");
+    let currentPage = 1;
+
+    // Calcola il numero di pagine necessarie
+    const totalPages = Math.ceil(boxes.length / itemsPerPage);
+
+    // Funzione per mostrare i box della pagina corrente
+    function showPage(page) {
+        const start = (page - 1) * itemsPerPage;
+        const end = start + itemsPerPage;
+
+        // Nascondi tutti i box
+        boxes.forEach((box, index) => {
+            box.style.display = index >= start && index < end ? "block" : "none";
+        });
+
+        // Aggiorna i pulsanti di navigazione
+        document.querySelectorAll(".pagination button").forEach((button, index) => {
+            button.classList.toggle("active", index + 1 === page);
+        });
+    }
+
+    //Funzione per creare i pulsanti di navigazione
+    function createPagination() {
+        for (let i = 1; i <= totalPages; i++) {
+            const button = document.createElement("button");
+            button.textContent = i;
+            if (i === currentPage) button.classList.add("active");
+            button.addEventListener("click", () => {
+                currentPage = i;
+                showPage(currentPage);
+            });
+            paginationContainer.appendChild(button);
+        }
+    }
+
+    // Inizializza la paginazione
+    createPagination();
+    showPage(currentPage);
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+    const comments = document.querySelectorAll(".ContenitoreCommenti .Comment");
+    const itemsPerPage = 4;
+    const paginationContainer = document.querySelector(".pagination");
+    let currentPage = 1;
+
+    // Calcola il numero di pagine necessarie
+    const totalPages = Math.ceil(comments.length / itemsPerPage);
+
+    // Funzione per mostrare i commenti della pagina corrente
+    function showPage(page) {
+        const start = (page - 1) * itemsPerPage;
+        const end = start + itemsPerPage;
+
+        // Nascondi tutti i commenti
+        comments.forEach((comment, index) => {
+            comment.style.display = index >= start && index < end ? "block" : "none";
+        });
+
+        // Aggiorna i pulsanti di navigazione
+        document.querySelectorAll(".pagination button").forEach((button, index) => {
+            button.classList.toggle("active", index + 1 === page);
+        });
+    }
+
+    // Funzione per creare i pulsanti di navigazione
+    function createPagination() {
+        for (let i = 1; i <= totalPages; i++) {
+            const button = document.createElement("button");
+            button.textContent = i;
+            if (i === currentPage) button.classList.add("active");
+            button.addEventListener("click", () => {
+                currentPage = i;
+                showPage(currentPage);
+            });
+            paginationContainer.appendChild(button);
+        }
+    }
+
+    // Inizializza la paginazione
+    createPagination();
+    showPage(currentPage);
+});
 
 // Aggiungi un listener per l'invio del form
 form.addEventListener('submit', async (e) => {
@@ -269,5 +754,6 @@ registerform.addEventListener('submit', async (e) => {
 
     registrationBack();
 });
+
 
 
