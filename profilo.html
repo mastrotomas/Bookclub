@@ -162,6 +162,135 @@
     
 
         <script src="index.js"></script>
+        <script>
+
+            window.addEventListener('DOMContentLoaded', () => {
+                getUserData();
+                if(localStorage.getItem("esitotemporaneo")){
+                    document.getElementById('esito').textContent = "Cambiamenti effettuati";
+                    document.getElementById('esito').style.opacity = 1;
+                    setTimeout(() => {
+                        document.getElementById('esito').style.opacity = 0;
+                    }, 5000);
+                    localStorage.removeItem("esitotemporaneo");
+                }
+
+            })
+            
+            document.getElementById("ModificaUtente").addEventListener('submit', async (e) => {
+                e.preventDefault(); 
+                const formData = new FormData();
+
+                // Aggiungi i dati del form
+                formData.append("usernameOriginale", localStorage.getItem("nomeUtenteLoggato"));
+                formData.append("username", document.getElementById("modificaUsername").value);
+                formData.append("email", document.getElementById("modificaEmail").value);
+
+                window.GeneridiLibro.forEach(genere => {
+                    formData.append(genere, document.getElementById(genere).checked);
+                });
+
+                if(document.getElementById("modificaPassword")){
+                    formData.append("password", document.getElementById("modificaPassword").value);
+                }
+                formData.append("passwordconf",document.getElementById("confermaPassword").value);
+                try {
+                    // Invia i dati al backend Flask
+                    const response = await fetch('http://127.0.0.1:5000/updateUser', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    // Ricevi e mostra la risposta dal server
+                    const result = await response.json();
+                    if(result.esito == 1){
+                        localStorage.setItem("nomeUtenteLoggato",result.username);
+                        localStorage.setItem("initialnameletter",result.firstletter);
+                        const inputFields = document.querySelectorAll('.search-inputa');
+                
+                        // Salva le modifiche 
+                        inputFields.forEach(function(input) {
+                            input.disabled = true;  // Disabilita i campi dopo la modifica
+                        });
+                        localStorage.setItem("esitotemporaneo", 1);
+                        location.reload();
+                    }else{
+                        document.getElementById('esito').textContent = "Password di conferma non corretta";
+                        document.getElementById('esito').style.opacity = 1;
+                        setTimeout(() => {
+                            document.getElementById('esito').style.opacity = 0;
+                        }, 5000);
+                    }
+                    
+                } catch (error) {
+                    console.error('Errore durante l\'invio dei dati:', error);
+                    document.getElementById('response').textContent = "Errore durante la registrazione";
+                }
+
+            });
+
+
+            async function getUserData(){
+                const registerData = {
+                    valorecercato: localStorage.getItem("nomeUtenteLoggato"),
+                };
+
+                try{
+                    const response = await fetch('http://127.0.0.1:5000/getUserData', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(registerData)
+                    });
+
+                    const results = await response.json(); // Supponiamo che il backend restituisca un array di libri
+                    const nickname = document.getElementById("modificaUsername");
+                    nickname.value = localStorage.getItem("nomeUtenteLoggato");
+                    const email = document.getElementById("modificaEmail");
+                    email.value = results.email;
+                    const password = document.getElementById("modificaPassword");
+                    password.value = results.password;
+                    const preferenze = results.preferenze;
+                    const GeneriPreferitiLabel = document.getElementById("GeneriPreferiti");
+                    window.GeneridiLibro.forEach(categoria =>{
+                        const label = document.createElement("label");
+                        const checkbox = document.createElement("input");
+                        checkbox.type = "checkbox";
+                        checkbox.id = categoria;
+
+                        label.appendChild(checkbox);
+
+                        const Testo = document.createTextNode(categoria);
+                        label.appendChild(Testo);
+
+                        GeneriPreferitiLabel.appendChild(label);
+
+                        preferenze.forEach(pref =>{
+                            if(checkbox.id == pref){
+                                checkbox.checked = true;
+                            }
+                        })
+
+                        
+                })
+
+                } catch (error) {
+                    console.error("Errore durante l'invio dei dati:", error);
+                }
+            }
+
+            // Funzione per abilitare la modifica del campo
+            function enableEdit(fieldId) {
+                const inputField = document.getElementById(fieldId);
+                const saveButton = document.getElementById("saveChanges");
+
+                // Abilita il campo di input
+                inputField.disabled = false;
+                document.getElementById(fieldId).value = "";
+            }
+
+        </script>
 </body>
 
 </html>

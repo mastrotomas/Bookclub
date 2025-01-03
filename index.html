@@ -144,5 +144,102 @@
     </div>
 </footer>
 <script src="index.js"></script>
+<script>
+window.addEventListener('DOMContentLoaded', () => {
+    getNewBook(0);
+    getNewBook(1);
+    if(localStorage.getItem("nomeUtenteLoggato")){
+        document.getElementById("NovitaeConsigliati").style.display = "flex";
+        document.getElementById("NovitaeConsigliati").style.justifyContent = "space-betwen";
+        document.getElementById("fieldsetConsigliati").style.maxWidth = "100%";
+        document.getElementById("fieldsetConsigliati").style.display = "block";
+        document.getElementById("fieldsetNovita").style.maxWidth = "100%";
+        getNewBook(2);
+    }
+})
+
+async function getNewBook(valore){
+    const registerData = {
+        valorecercato: valore,
+        nomeUtente: localStorage.getItem("nomeUtenteLoggato")
+    };
+    try {
+        // Invia i dati al backend Flask
+        const response = await fetch('http://127.0.0.1:5000/getNewBook', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(registerData)
+        });
+        const results = await response.json();
+        if(valore == 0){
+            const scrollDiv = document.getElementById("scrollDivNovita");
+            results.forEach(book =>{
+            const libro = document.createElement("div");
+            const image = document.createElement("img");
+            const nomeLibro = document.createElement("div");
+            const name = document.createElement("p");
+            libro.className = "book";
+
+            nomeLibro.className = "bookName";
+            image.src = book.imagePath;
+            name.textContent = book.titolo;
+            scrollDiv.appendChild(libro);
+            libro.appendChild(image);
+            libro.appendChild(nomeLibro);
+            nomeLibro.appendChild(name);
+            libro.addEventListener("click", () => {
+                window.location.href = `bookpage.html?id=${book.id}`;
+            });
+        })
+        }else if(valore == 1){
+            const scrollDiv = document.getElementById("scrollDivWeek");
+            results.forEach(book =>{
+            const libro = document.createElement("div");
+            const image = document.createElement("img");
+            const nomeLibro = document.createElement("div");
+            const name = document.createElement("p");
+            libro.className = "book";
+
+            nomeLibro.className = "bookName";
+            image.src = book.imagePath;
+            name.textContent = book.titolo;
+            scrollDiv.appendChild(libro);
+            libro.appendChild(image);
+            libro.appendChild(nomeLibro);
+            nomeLibro.appendChild(name);
+            libro.addEventListener("click", () => {
+                window.location.href = `bookpage.html?id=${book.id}`;
+            });
+        })  
+        }else{
+            const scrollDiv = document.getElementById("scrollDivConsigliati");
+            results.forEach(book =>{
+            const libro = document.createElement("div");
+            const image = document.createElement("img");
+            const nomeLibro = document.createElement("div");
+            const name = document.createElement("p");
+            libro.className = "book";
+
+            nomeLibro.className = "bookName";
+            image.src = book.imagePath;
+            name.textContent = book.titolo;
+            scrollDiv.appendChild(libro);
+            libro.appendChild(image);
+            libro.appendChild(nomeLibro);
+            nomeLibro.appendChild(name);
+            libro.addEventListener("click", () => {
+                window.location.href = `bookpage.html?id=${book.id}`;
+            });
+        })  
+        }
+
+
+    }catch(error){
+        console.error("Errore durante l'invio dei dati:", error);
+    }
+}
+</script>
 </body>
 </html>

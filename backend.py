@@ -7,18 +7,47 @@ from db import addNewUser
 from db import searchBooks
 from db import ContenutoLibri
 from db import commentiLibri
+from db import RegisterBook
+from db import myBook
 from db import OttieniCommentiUtenti
+from db import deletemyBook
+from db import deletemyComment
 from db import regCommento
 from db import getGerne
 from db import getLink
-
+from db import get_bookad
+from db import accept_bookad
+from db import refuse_bookad
 from db import ricercapergenere
-
+from db import getUserData
+from db import userUpdate
 from db import categoryBooks
 from db import getSimilar
-
+from db import getNew
 app = Flask(__name__)
 CORS(app)  # Abilita CORS per evitare errori cross-origin
+
+@app.route('/mybook', methods=['POST'])
+def mybooks():
+    # Ricevi i dati JSON inviati dal frontend
+    data = request.json
+
+    # Esegui un'operazione sui dati (esempio: concatenare nome e cognome)
+    uusername = data.get("valorecercato")
+    rows = myBook(uusername)
+    print(f"Dati ricevuti: {uusername}")
+    results = []
+    for row in rows:
+        results.append({
+            "bookId": row[0],
+            "bookname": row[1],
+            "bookdesc": row[3],
+            "isApproved" : row[6],
+            "path" : row[7]
+        })
+
+       # Restituisci una risposta al frontend
+    return jsonify(results)
 
 @app.route('/getUsercomment', methods=['POST'])
 def CommentiUtenti():
@@ -42,7 +71,7 @@ def CommentiUtenti():
        # Restituisci una risposta al frontend
     return jsonify(results)
 
-@app.route('/effettualogin', methods=['POST']) 
+@app.route('/effettualogin', methods=['POST'])
 def effettualogin():
     # Ricevi i dati JSON inviati dal frontend
     data = request.json
@@ -58,8 +87,25 @@ def effettualogin():
     # Restituisci una risposta al frontend
     return jsonify({'esito': esito, 'initialnameletter': initialnameletter,'username': username})
 
+@app.route('/getUserData', methods=['POST'])
+def getUsersData():
+    # Ricevi i dati JSON inviati dal frontend
+    data = request.json
 
-@app.route('/registerUtente', methods=['POST']) 
+    # Esegui un'operazione sui dati (esempio: concatenare nome e cognome)
+    username = data.get("valorecercato")
+    Email = getUserData(username)
+    email = Email[0]
+    preferenze = Email[1]
+    res_list = []
+    res_list = re.findall('[A-Z][^A-Z]*', preferenze)
+    # Stampa i dati nel terminale (debug)
+
+    # Restituisci una risposta al frontend
+    return jsonify({'email': email , 'preferenze': res_list})
+
+
+@app.route('/registerUtente', methods=['POST'])
 def registerUtente():
     # Ricevi i dati JSON inviati dal frontend
     data = request.json
@@ -79,7 +125,7 @@ def registerUtente():
     else :
         return jsonify({'message': 'Utente già registrato','color': 'red'})
 
-@app.route('/books', methods=['POST']) 
+@app.route('/books', methods=['POST'])
 def books():
     # Ricevi i dati JSON inviati dal frontend
     data = request.json
@@ -100,7 +146,7 @@ def books():
        # Restituisci una risposta al frontend
     return jsonify(results)
 
-@app.route('/categoriadeilibri', methods=['POST']) 
+@app.route('/categoriadeilibri', methods=['POST'])
 def libricategory():
     # Ricevi i dati JSON inviati dal frontend
     data = request.json
@@ -121,7 +167,7 @@ def libricategory():
        # Restituisci una risposta al frontend
     return jsonify(results)
 
-@app.route('/bookspergenere', methods=['POST']) 
+@app.route('/bookspergenere', methods=['POST'])
 def bookspergenere():
     # Ricevi i dati JSON inviati dal frontend
     data = request.json
@@ -143,7 +189,7 @@ def bookspergenere():
        # Restituisci una risposta al frontend
     return jsonify(results)
 
-@app.route('/getBookContent', methods=['POST']) 
+@app.route('/getBookContent', methods=['POST'])
 def getBookContent():
     # Ricevi i dati JSON inviati dal frontend
     data = request.json
@@ -166,7 +212,7 @@ def getBookContent():
        # Restituisci una risposta al frontend
     return jsonify(results)
 
-@app.route('/getBookComment', methods=['POST']) 
+@app.route('/getBookComment', methods=['POST'])
 def coomentBookss():
     # Ricevi i dati JSON inviati dal frontend
     data = request.json
@@ -186,7 +232,7 @@ def coomentBookss():
        # Restituisci una risposta al frontend
     return jsonify(results)
 
-@app.route('/getGenreBook', methods=['POST']) 
+@app.route('/getGenreBook', methods=['POST'])
 def genreBookss():
     # Ricevi i dati JSON inviati dal frontend
     data = request.json
@@ -203,7 +249,7 @@ def genreBookss():
        # Restituisci una risposta al frontend
     return jsonify(results)
 
-@app.route('/getSimilarBook', methods=['POST']) 
+@app.route('/getSimilarBook', methods=['POST'])
 def similarBookss():
     # Ricevi i dati JSON inviati dal frontend
     data = request.json
@@ -223,7 +269,27 @@ def similarBookss():
        # Restituisci una risposta al frontend
     return jsonify(results)
 
-@app.route('/getLinkBook', methods=['POST']) 
+@app.route('/getNewBook', methods=['POST'])
+def getNewBooks():
+        # Ricevi i dati JSON inviati dal frontend
+    data = request.json
+
+    # Esegui un'operazione sui dati (esempio: concatenare nome e cognome)
+    valore = data.get("valorecercato")
+    nomeUtente = data.get("nomeUtente")
+    rows = getNew(valore,nomeUtente)
+    results = []
+    for row in rows:
+        results.append({
+            "id" : row[0],
+            "titolo": row[1],
+            "imagePath": row[2]
+        })
+
+       # Restituisci una risposta al frontend
+    return jsonify(results)
+
+@app.route('/getLinkBook', methods=['POST'])
 def LinkBookss():
     # Ricevi i dati JSON inviati dal frontend
     data = request.json
@@ -241,7 +307,74 @@ def LinkBookss():
        # Restituisci una risposta al frontend
     return jsonify(results)
 
-@app.route('/regCommento', methods=['POST']) 
+UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), 'uploads')
+os.makedirs(UPLOAD_FOLDER,exist_ok = True) #Crea la cartella se non esiste
+
+@app.route('/registerLibri', methods=['POST'])
+def registerLibri():
+    # Ottieni i dati inviati dal frontend
+    data = request.form
+    file = request.files.get("copertina")  # Ottieni il file dal form
+
+    # Verifica che il file sia presente
+    if not file or file.filename == '':
+        return jsonify({'error': 'Nessun file di copertina ricevuto'}), 400
+
+    # Percorso completo per salvare il file
+    file_path = os.path.join(UPLOAD_FOLDER, file.filename)
+    file.save(file_path)  # Salva il file fisicamente nella cartella
+
+    relative_path = os.path.relpath(file_path, os.path.dirname(__file__))
+    relative_path = relative_path.replace("\\","/")
+    # Raccogli i dati del form
+    titolo = data.get("titolo")
+    autore = data.get("autore")
+    sinossi = data.get("sinossi")
+    creato_da = data.get("creatoda")
+    annoproduzione = data.get("annoproduzione")
+    Generi = {
+        "Horror": data.get("Horror") == 'true',
+        "Letteratura": data.get("Letteratura") == 'true',
+        "Romanzo": data.get("Romanzo") == 'true',
+        "Fantasy": data.get("Fantasy") == 'true',
+        "Romanzo di formazione": data.get("Romanzo di formazione") == 'true',
+        "Fantastico": data.get("Fantastico") == 'true',
+        "Giallo": data.get("Giallo") == 'true',
+        "Thriller": data.get("Thriller") == 'true',
+        "Racconto": data.get("Racconto") == 'true',
+        "Drammatico": data.get("Drammatico") == 'true',
+        "Sentimentale": data.get("Sentimentale") == 'true',
+        "Storico": data.get("Storico") == 'true',
+        "Gotico": data.get("Gotico") == 'true',
+        "Filosofico": data.get("Filosofico") == 'true',
+        "Fantascienza": data.get("Fantascienza") == 'true',
+        "Politica": data.get("Politica") == 'true',
+        "Economia": data.get("Economia") == 'true',
+        "Diritto": data.get("Diritto") == 'true',
+        "Biografia": data.get("Biografia") == 'true',
+        "Casa": data.get("Casa") == 'true',
+        "Arte": data.get("Arte") == 'true',
+        "Poetico": data.get("Poetico") == 'true',
+        "Educazione": data.get("Educazione") == 'true',
+        "Viaggi": data.get("Viaggi") == 'true',
+        "Psicologia": data.get("Psicologia") == 'true',
+        "Religione": data.get("Religione") == 'true',
+        "Salute e Benessere": data.get("Salute e Benessere") == 'true',
+        "Scienza": data.get("Scienza") == 'true',
+        "Sport": data.get("Sport") == 'true'
+    }
+    Link ={
+        "Amazon" : data.get("Amazon"),
+        "Feltrinelli" : data.get("Feltrinelli"),
+        "Mondadori" : data.get("Mondadori")
+    }
+    print(Generi)
+    # Salva i dati nel database (funzione definita a parte)
+    RegisterBook(titolo, autore, sinossi, creato_da, Generi, relative_path,Link,annoproduzione)
+
+    return jsonify({'message': f'Libro "{titolo}" registrato con successo, file salvato in {file_path}'})
+
+@app.route('/regCommento', methods=['POST'])
 def registrazioneCommento():
     # Ricevi i dati JSON inviati dal frontend
     data = request.json
@@ -257,6 +390,117 @@ def registrazioneCommento():
 
        # Restituisci una risposta al frontend
     return jsonify({'message': risultato})
+
+@app.route('/deleteBook', methods=['POST'])
+def deleteBook():
+    # Ricevi i dati JSON inviati dal frontend
+    data = request.json
+
+    # Esegui un'operazione sui dati (esempio: concatenare nome e cognome)
+    idLibro = data.get("valorecercato")
+    deletemyBook(idLibro)
+    print(f"Dati ricevuti: {idLibro}")
+
+       # Restituisci una risposta al frontend
+    return jsonify({'message': 'eliminati'})
+
+@app.route('/deleteComment', methods=['POST'])
+def deleteComment():
+    # Ricevi i dati JSON inviati dal frontend
+    data = request.json
+
+    # Esegui un'operazione sui dati (esempio: concatenare nome e cognome)
+    idCommento = data.get("valorecercato")
+    deletemyComment(idCommento)
+    print(f"Dati ricevutiq: {idCommento}")
+
+       # Restituisci una risposta al frontend
+    return jsonify({'message': 'eliminati'})
+
+
+@app.route('/admins', methods=['POST'])
+def process_admin():
+    # Ricevi i dati JSON inviati dal frontend
+    data = request.json
+
+    rows = get_bookad()
+    results = []
+    for row in rows :
+        results.append({
+            "username" : row[0],
+            "email" : row[1],
+            "titolo" : row[2],
+            "autore" : row[3],
+            "descrizione": row[4],
+            "id" : row[5]
+        })
+
+    # Restituisci una risposta al frontend
+    return jsonify(results)
+
+@app.route('/accept', methods=['POST'])
+def accept_admin():
+    # Ricevi i dati JSON inviati dal frontend
+    data = request.json
+    id= data.get("valorecercato")
+    accept_bookad(id)
+    # Restituisci una risposta al frontend
+    return jsonify({'message': 'approvato'})
+
+@app.route('/refuse', methods=['POST'])
+def refuse_admin():
+    # Ricevi i dati JSON inviati dal frontend
+    data = request.json
+    id= data.get("valorecercato")
+    refuse_bookad(id)
+    # Restituisci una risposta al frontend
+    return jsonify({'message': 'rifiutato'})
+
+
+@app.route('/updateUser', methods=['POST'])
+def user_update():
+    # Ottieni i dati inviati dal frontend
+    data = request.form
+
+    OGusername = data.get("usernameOriginale")
+    username = data.get("username")
+    email = data.get("email")
+    password = data.get("password")
+    passwordconf = data.get("passwordconf")
+    Generi = {
+        "Horror": data.get("Horror") == 'true',
+        "Letteratura": data.get("Letteratura") == 'true',
+        "Romanzo": data.get("Romanzo") == 'true',
+        "Fantasy": data.get("Fantasy") == 'true',
+        "Romanzo di formazione": data.get("Romanzo di formazione") == 'true',
+        "Fantastico": data.get("Fantastico") == 'true',
+        "Giallo": data.get("Giallo") == 'true',
+        "Thriller": data.get("Thriller") == 'true',
+        "Racconto": data.get("Racconto") == 'true',
+        "Drammatico": data.get("Drammatico") == 'true',
+        "Sentimentale": data.get("Sentimentale") == 'true',
+        "Storico": data.get("Storico") == 'true',
+        "Gotico": data.get("Gotico") == 'true',
+        "Filosofico": data.get("Filosofico") == 'true',
+        "Fantascienza": data.get("Fantascienza") == 'true',
+        "Politica": data.get("Politica") == 'true',
+        "Economia": data.get("Economia") == 'true',
+        "Diritto": data.get("Diritto") == 'true',
+        "Biografia": data.get("Biografia") == 'true',
+        "Casa": data.get("Casa") == 'true',
+        "Arte": data.get("Arte") == 'true',
+        "Poetico": data.get("Poetico") == 'true',
+        "Educazione": data.get("Educazione") == 'true',
+        "Viaggi": data.get("Viaggi") == 'true',
+        "Psicologia": data.get("Psicologia") == 'true',
+        "Religione": data.get("Religione") == 'true',
+        "Salute e Benessere": data.get("Salute e Benessere") == 'true',
+        "Scienza": data.get("Scienza") == 'true',
+        "Sport": data.get("Sport") == 'true'
+    }
+    esito = userUpdate(OGusername,username, email, password, passwordconf, Generi)
+
+    return jsonify({'username': username,'firstletter': username[0],'esito': esito})
 
 if __name__ == '__main__':
     app.run(debug=True)
