@@ -2,11 +2,12 @@ const slides = document.querySelectorAll(".slides img");
 const form = document.getElementById('dataForm');
 const registerform = document.getElementById('registerForm');
 window.GeneridiLibro = ["Racconto","Letteratura","Romanzo","Fantasy",
-    "Romanzo di Formazione","Fantastico","Giallo","Thriller",
-    "Drammatico","Sentimentale","Storico","Gotico","Filosofico",
-    "Horror","Fantascienza","Politica","Economia","Diritto",
-    "Biografia","Casa","Arte","Poetico","Educazione","Viaggi",
-    "Psicologia","Religione","Salute e Benessere","Scienza","Sport"];
+                        "Romanzo di Formazione","Fantastico","Giallo","Thriller",
+                        "Drammatico","Sentimentale","Storico","Gotico","Filosofico",
+                        "Horror","Fantascienza","Politica","Economia","Diritto",
+                        "Biografia","Casa","Arte","Poetico","Educazione","Viaggi",
+                        "Psicologia","Religione","Salute e Benessere","Scienza","Sport"];
+
 let slideIndex = 0;
 let intervalId = null;
 
@@ -23,6 +24,7 @@ const responseLogin = document.getElementById("response");
 const ToolLogin = document.getElementById("loggedTool");
 const buttonExit = document.getElementById("exitButton");
 const searchInput = document.getElementById("searchINput");
+const addBooks = document.getElementById("addBook");
 
 function initializeSlider() {
     if (slides.length > 0) {
@@ -110,6 +112,23 @@ blacklayer.addEventListener("click", () => {
 
 })
 
+addBooks.addEventListener("click", () => {
+
+    window.location.href = `bookRegistration.html?addBook=${encodeURIComponent(localStorage.getItem("nomeUtenteLoggato"))}`;
+
+})
+
+document.getElementById("AccountPreference").addEventListener("click", () => {
+
+    window.location.href = `profilo.html?accountPreference=${encodeURIComponent(localStorage.getItem("nomeUtenteLoggato"))}`;
+
+})
+
+document.getElementById("MyComment").addEventListener("click", () => {
+
+    window.location.href = `MieiLibri.html?imieicommenti=${encodeURIComponent(localStorage.getItem("nomeUtenteLoggato"))}`;
+
+})
 
 function passaggioCategoria(text){
     window.location.href = `searchIndex.html?category=${text}`;
@@ -756,4 +775,17 @@ registerform.addEventListener('submit', async (e) => {
 });
 
 
+
+
+document.getElementById("MyBook").addEventListener("click", () => {
+
+    window.location.href = `MieiLibri.html?utente=${encodeURIComponent(localStorage.getItem("nomeUtenteLoggato"))}`;
+
+})
+
+document.getElementById("manageRequest").addEventListener("click", () => {
+
+    window.location.href = `paginaAdmin.html?admin=${encodeURIComponent(localStorage.getItem("nomeUtenteLoggato"))}`;
+
+})
 

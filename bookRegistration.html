@@ -173,7 +173,17 @@
         Copyright © 2025 RaffNicoTomm Tutti i diritti riservati.
         </div>
     </footer>
+        <script src="index.js"></script>
+        <script src="bookRegistration.js"></script>
+        <script>
+            let image = document.getElementById("immagineDaFile");
+            let input_file = document.getElementById("FileUpload");
 
+            input_file.onchange = function(){
+                image.src = URL.createObjectURL(input_file.files[0]);
+                image.style.opacity = "1";
+            }
+        </script>
 </body>
 
 </html>
